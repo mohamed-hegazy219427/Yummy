@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Meal } from "@/types/meal";
@@ -10,7 +11,6 @@ import {
   CheckCircle2, 
   PlayCircle 
 } from "lucide-react";
-import { TwitterIcon as Youtube } from "../ui/Icons"; // Using Youtube replacement or placeholder
 import AnimatedSection from "../ui/AnimatedSection";
 
 interface MealDetailProps {
@@ -44,10 +44,13 @@ export default function MealDetail({ meal }: MealDetailProps) {
     <div ref={containerRef} className="space-y-20 pb-20">
       {/* Hero Section */}
       <section className="relative h-[60vh] md:h-[70vh] rounded-[3rem] overflow-hidden shadow-2xl">
-        <img 
-          src={meal.strMealThumb} 
-          alt={meal.strMeal} 
-          className="detail-image w-full h-full object-cover"
+        <Image
+          src={meal.strMealThumb}
+          alt={meal.strMeal}
+          fill
+          priority
+          sizes="100vw"
+          className="detail-image object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-t from-base-100 via-base-100/40 to-transparent" />
         

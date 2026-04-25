@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import { mealService } from "../../api/mealApi";
 import { Meal } from "../../types/meal";
@@ -11,9 +12,15 @@ interface MealPageProps {
 
 export default function MealPage({ id, initialMeal }: MealPageProps) {
   return (
-    <Layout>
-      <MealDetail meal={initialMeal} />
-    </Layout>
+    <>
+      <Head>
+        <title>{initialMeal.strMeal} — Yummy</title>
+        <meta name="description" content={`${initialMeal.strMeal} — a ${initialMeal.strArea} ${initialMeal.strCategory} recipe. Step-by-step instructions and full ingredient list.`} />
+      </Head>
+      <Layout>
+        <MealDetail meal={initialMeal} />
+      </Layout>
+    </>
   );
 }
 

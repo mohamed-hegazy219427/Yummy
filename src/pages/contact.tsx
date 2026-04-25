@@ -1,6 +1,7 @@
 import { useState } from "react";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
-import { Send, User, Mail, Phone, Hash, Lock, CheckCircle2, MessageSquare } from "lucide-react";
+import { Send, User, Mail, Phone, Hash, Lock, CheckCircle2, MessageSquare, Globe } from "lucide-react";
 import PageHeader from "../components/ui/PageHeader";
 import AnimatedSection from "../components/ui/AnimatedSection";
 
@@ -13,7 +14,12 @@ export default function Contact() {
   };
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Contact Us — Yummy</title>
+        <meta name="description" content="Have a question about a recipe? Want to share your culinary creations? We're here to help and listen to our community." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Connect with"
@@ -107,5 +113,6 @@ export default function Contact() {
         )}
       </div>
     </Layout>
+    </>
   );
 }

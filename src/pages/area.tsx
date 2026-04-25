@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import { mealService } from "../api/mealApi";
 import { Area } from "../types/meal";
@@ -12,7 +13,12 @@ interface AreaProps {
 
 export default function Areas({ areas }: AreaProps) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>World Cuisines — Yummy</title>
+        <meta name="description" content="Take your taste buds on a global adventure. Discover traditional dishes and hidden gems from cultures across the planet." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="World"
@@ -32,6 +38,7 @@ export default function Areas({ areas }: AreaProps) {
         </AnimatedSection>
       </section>
     </Layout>
+    </>
   );
 }
 

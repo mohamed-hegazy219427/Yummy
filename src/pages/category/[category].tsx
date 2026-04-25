@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
@@ -20,7 +21,12 @@ export default function CategoryDetail({ category, initialMeals }: CategoryDetai
   });
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>{category} Recipes — Yummy</title>
+        <meta name="description" content={`Explore our hand-picked collection of ${category.toLowerCase()} recipes. Each dish is selected for its authentic flavor and unique preparation style.`} />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Delicious"
@@ -33,6 +39,7 @@ export default function CategoryDetail({ category, initialMeals }: CategoryDetai
         <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
       </section>
     </Layout>
+    </>
   );
 }
 

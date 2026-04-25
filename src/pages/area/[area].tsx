@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
@@ -20,7 +21,12 @@ export default function AreaDetail({ area, initialMeals }: AreaDetailProps) {
   });
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Taste of {area} — Yummy</title>
+        <meta name="description" content={`Dive into the rich culinary heritage of ${area}. Experience the traditional ingredients and techniques that make this cuisine world-renowned.`} />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Taste of"
@@ -33,6 +39,7 @@ export default function AreaDetail({ area, initialMeals }: AreaDetailProps) {
         <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
       </section>
     </Layout>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import { mealService } from "../api/mealApi";
 import { Category } from "../types/meal";
@@ -12,7 +13,12 @@ interface CategoriesProps {
 
 export default function Categories({ categories }: CategoriesProps) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Browse Categories — Yummy</title>
+        <meta name="description" content="Explore our diverse range of food categories. Whether you're in the mood for something light or a hearty feast, we have you covered." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Browse by"
@@ -32,6 +38,7 @@ export default function Categories({ categories }: CategoriesProps) {
         </AnimatedSection>
       </section>
     </Layout>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
-import { Globe, Instagram, Mail } from "lucide-react";
-import { FacebookIcon as Facebook, TwitterIcon as Twitter, InstagramIcon as InstagramAlt } from "../ui/Icons";
+import { Globe, Camera, Mail, Share2, X } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -21,9 +20,9 @@ export default function Footer() {
       <nav>
         <h6 className="footer-title opacity-100 text-primary font-bold">Social</h6>
         <div className="grid grid-flow-col gap-4">
-          <a href="#" className="btn btn-ghost btn-circle btn-sm"><Facebook size={20} /></a>
-          <a href="#" className="btn btn-ghost btn-circle btn-sm"><Twitter size={20} /></a>
-          <a href="#" className="btn btn-ghost btn-circle btn-sm"><InstagramAlt size={20} /></a>
+          <a href="#" className="btn btn-ghost btn-circle btn-sm"><Share2 size={20} /></a>
+          <a href="#" className="btn btn-ghost btn-circle btn-sm"><X size={20} /></a>
+          <a href="#" className="btn btn-ghost btn-circle btn-sm"><Camera size={20} /></a>
           <a href="#" className="btn btn-ghost btn-circle btn-sm"><Mail size={20} /></a>
         </div>
       </nav>

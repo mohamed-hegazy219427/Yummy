@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Category } from "@/types/meal";
 import { ArrowRight } from "lucide-react";
 
@@ -10,13 +11,15 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link 
       href={`/category/${category.strCategory}`}
-      className="group relative overflow-hidden rounded-3xl bg-base-200 aspect-[4/5] shadow-sm hover:shadow-2xl transition-all duration-500 border border-base-300 flex flex-col"
+      className="group relative overflow-hidden rounded-3xl bg-base-200 aspect-4/5 shadow-sm hover:shadow-2xl transition-all duration-500 border border-base-300 flex flex-col"
     >
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={category.strCategoryThumb}
           alt={category.strCategory}
-          className="w-full h-full object-contain p-8 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-3"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-contain p-8 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-3"
         />
       </div>
       

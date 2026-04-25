@@ -12,9 +12,9 @@ import {
   Mail, 
   Globe,
   X,
-  Menu
+  Menu,
+  Share2
 } from "lucide-react";
-import { FacebookIcon as Facebook, TwitterIcon as Twitter } from "../ui/Icons";
 import ThemePicker from "../ui/ThemePicker";
 
 export default function Sidebar() {
@@ -115,8 +115,8 @@ export default function Sidebar() {
           <ThemePicker />
           
           <div className="flex items-center gap-4 text-base-content/60">
-            <a href="#" className="hover:text-primary transition-colors"><Facebook size={20} /></a>
-            <a href="#" className="hover:text-primary transition-colors"><Twitter size={20} /></a>
+            <a href="#" className="hover:text-primary transition-colors"><Share2 size={20} /></a>
+            <a href="#" className="hover:text-primary transition-colors"><X size={20} /></a>
             <a href="#" className="hover:text-primary transition-colors"><Globe size={20} /></a>
           </div>
 

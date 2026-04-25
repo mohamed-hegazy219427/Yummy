@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import MealGrid from "../components/meals/MealGrid";
 import { mealService } from "../api/mealApi";
@@ -19,7 +20,12 @@ export default function Home({ initialMeals }: HomeProps) {
   });
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Yummy — Discover World Recipes</title>
+        <meta name="description" content="Explore thousands of mouth-watering recipes from every corner of the globe. From simple snacks to gourmet feasts, your culinary journey starts here." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up" delay={0.2}>
         <PageHeader 
           title="Master Your"
@@ -38,6 +44,7 @@ export default function Home({ initialMeals }: HomeProps) {
         <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
       </section>
     </Layout>
+    </>
   );
 }
 

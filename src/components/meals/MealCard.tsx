@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Meal } from "@/types/meal";
 import { ArrowUpRight, Clock, Utensils } from "lucide-react";
 
@@ -8,14 +9,16 @@ interface MealCardProps {
 
 export default function MealCard({ meal }: MealCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-[2.5rem] bg-base-200 aspect-[3/4] shadow-md hover:shadow-2xl transition-all duration-700 border border-base-300">
+    <div className="group relative overflow-hidden rounded-[2.5rem] bg-base-200 aspect-3/4 shadow-md hover:shadow-2xl transition-all duration-700 border border-base-300">
       <Link href={`/meal/${meal.idMeal}`} className="block h-full">
         {/* Image with zoom effect */}
         <div className="absolute inset-0">
-          <img
+          <Image
             src={meal.strMealThumb}
             alt={meal.strMeal}
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-1000 group-hover:scale-110"
           />
           {/* Branded overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />

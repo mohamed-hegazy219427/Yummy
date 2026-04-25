@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import { mealService } from "../api/mealApi";
 import { Ingredient } from "../types/meal";
@@ -12,7 +13,12 @@ interface IngredientsProps {
 
 export default function Ingredients({ ingredients }: IngredientsProps) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Fresh Ingredients — Yummy</title>
+        <meta name="description" content="Explore recipes based on their core components. Learn about the building blocks of flavor and find new ways to use your favorite staples." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Fresh"
@@ -32,6 +38,7 @@ export default function Ingredients({ ingredients }: IngredientsProps) {
         </AnimatedSection>
       </section>
     </Layout>
+    </>
   );
 }
 

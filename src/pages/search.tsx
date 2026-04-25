@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import MealGrid from "../components/meals/MealGrid";
 import { mealService } from "../api/mealApi";
@@ -27,7 +28,12 @@ export default function Search() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>Search Recipes — Yummy</title>
+        <meta name="description" content="Search through our database by name or explore recipes by their starting letter. Your perfect meal is just a few keystrokes away." />
+      </Head>
+      <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
           title="Find Your"
@@ -100,5 +106,6 @@ export default function Search() {
         </div>
       </section>
     </Layout>
+    </>
   );
 }
