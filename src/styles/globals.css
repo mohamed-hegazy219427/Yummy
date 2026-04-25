@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: dark --default, light, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpuck, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord, sunset;
+}
+
+@theme {
+  --color-primary: #ffc107;
+  --color-primary-dark: #e0a800;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+[data-theme='dark'] {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* GSAP Specific Styles */
+.sidebar-link {
+  transform: translateY(100px);
+  opacity: 0;
+}
