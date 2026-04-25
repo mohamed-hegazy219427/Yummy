@@ -1,6 +1,6 @@
 import { Meal } from "@/types/meal";
 import MealCard from "./MealCard";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import MealCardSkeleton from "./MealCardSkeleton";
 import AnimatedSection from "../ui/AnimatedSection";
 
 interface MealGridProps {
@@ -10,7 +10,13 @@ interface MealGridProps {
 
 export default function MealGrid({ meals, isLoading }: MealGridProps) {
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <MealCardSkeleton key={i} />
+        ))}
+      </div>
+    );
   }
 
   if (!meals || meals.length === 0) {

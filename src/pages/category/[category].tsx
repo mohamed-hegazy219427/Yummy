@@ -1,24 +1,18 @@
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
-import { useQuery } from "@tanstack/react-query";
 import { Meal } from "../../types/meal";
 import PageHeader from "../../components/ui/PageHeader";
 import AnimatedSection from "../../components/ui/AnimatedSection";
 
 interface CategoryDetailProps {
   category: string;
-  initialMeals: Meal[];
+  meals: Meal[];
 }
 
-export default function CategoryDetail({ category, initialMeals }: CategoryDetailProps) {
-  const { data: meals, isLoading } = useQuery({
-    queryKey: ["category", category],
-    queryFn: () => mealService.getMealsByCategory(category),
-    initialData: initialMeals,
-  });
+export default function CategoryDetail({ category, meals }: CategoryDetailProps) {
 
   return (
     <>
@@ -36,29 +30,30 @@ export default function CategoryDetail({ category, initialMeals }: CategoryDetai
       </AnimatedSection>
 
       <section className="mt-12 pt-10 border-t border-base-300">
-        <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
+        <MealGrid meals={meals} />
       </section>
     </Layout>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const categories = await mealService.getCategories();
+  return {
+    paths: categories.map((c) => ({ params: { category: c.strCategory } })),
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const category = params?.category as string;
   try {
     const meals = await mealService.getMealsByCategory(category);
     return {
-      props: {
-        category,
-        initialMeals: meals,
-      },
+      props: { category, meals },
+      revalidate: 3600,
     };
-  } catch (error) {
-    return {
-      props: {
-        category,
-        initialMeals: [],
-      },
-    };
+  } catch {
+    return { notFound: true };
   }
 };

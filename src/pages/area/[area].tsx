@@ -1,24 +1,18 @@
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
-import { useQuery } from "@tanstack/react-query";
 import { Meal } from "../../types/meal";
 import PageHeader from "../../components/ui/PageHeader";
 import AnimatedSection from "../../components/ui/AnimatedSection";
 
 interface AreaDetailProps {
   area: string;
-  initialMeals: Meal[];
+  meals: Meal[];
 }
 
-export default function AreaDetail({ area, initialMeals }: AreaDetailProps) {
-  const { data: meals, isLoading } = useQuery({
-    queryKey: ["area", area],
-    queryFn: () => mealService.getMealsByArea(area),
-    initialData: initialMeals,
-  });
+export default function AreaDetail({ area, meals }: AreaDetailProps) {
 
   return (
     <>
@@ -36,29 +30,30 @@ export default function AreaDetail({ area, initialMeals }: AreaDetailProps) {
       </AnimatedSection>
 
       <section className="mt-12 pt-10 border-t border-base-300">
-        <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
+        <MealGrid meals={meals} />
       </section>
     </Layout>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const areas = await mealService.getAreas();
+  return {
+    paths: areas.map((a) => ({ params: { area: a.strArea } })),
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const area = params?.area as string;
   try {
     const meals = await mealService.getMealsByArea(area);
     return {
-      props: {
-        area,
-        initialMeals: meals,
-      },
+      props: { area, meals },
+      revalidate: 3600,
     };
-  } catch (error) {
-    return {
-      props: {
-        area,
-        initialMeals: [],
-      },
-    };
+  } catch {
+    return { notFound: true };
   }
 };

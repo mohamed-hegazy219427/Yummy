@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Layout from "../../components/layout/Layout";
 import { mealService } from "../../api/mealApi";
@@ -6,11 +6,10 @@ import { Meal } from "../../types/meal";
 import MealDetail from "../../components/meals/MealDetail";
 
 interface MealPageProps {
-  id: string;
   initialMeal: Meal;
 }
 
-export default function MealPage({ id, initialMeal }: MealPageProps) {
+export default function MealPage({ initialMeal }: MealPageProps) {
   return (
     <>
       <Head>
@@ -24,20 +23,20 @@ export default function MealPage({ id, initialMeal }: MealPageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  return { paths: [], fallback: "blocking" };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = params?.id as string;
   try {
     const meal = await mealService.getMealById(id);
-    if (!meal) {
-      return { notFound: true };
-    }
+    if (!meal) return { notFound: true };
     return {
-      props: {
-        id,
-        initialMeal: meal,
-      },
+      props: { initialMeal: meal },
+      revalidate: 3600,
     };
-  } catch (error) {
+  } catch {
     return { notFound: true };
   }
 };

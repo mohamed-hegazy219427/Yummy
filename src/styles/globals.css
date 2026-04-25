@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: dark --default, light, synthwave, cyberpunk, luxury, nord, sunset, cupcake;
@@ -27,9 +28,6 @@
   --rounded-btn: 0.75rem;
   --animation-btn: 0.25s;
 }
-
-/* ── Google Fonts ── */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap");
 
 /* ── Base styles ── */
 @theme {

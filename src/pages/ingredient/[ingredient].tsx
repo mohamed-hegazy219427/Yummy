@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import Layout from "../../components/layout/Layout";
-import PageHeader from "../../components/shared/PageHeader";
+import PageHeader from "../../components/ui/PageHeader";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
 import { useQuery } from "@tanstack/react-query";
