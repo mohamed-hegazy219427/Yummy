@@ -7,15 +7,15 @@ import { Meal } from "../../types/meal";
 import PageHeader from "../../components/ui/PageHeader";
 import AnimatedSection from "../../components/ui/AnimatedSection";
 
-interface CategoryDetailProps {
-  category: string;
+interface IngredientDetailProps {
+  ingredient: string;
   initialMeals: Meal[];
 }
 
-export default function CategoryDetail({ category, initialMeals }: CategoryDetailProps) {
+export default function IngredientDetail({ ingredient, initialMeals }: IngredientDetailProps) {
   const { data: meals, isLoading } = useQuery({
-    queryKey: ["category", category],
-    queryFn: () => mealService.getMealsByCategory(category),
+    queryKey: ["ingredient", ingredient],
+    queryFn: () => mealService.getMealsByIngredient(ingredient),
     initialData: initialMeals,
   });
 
@@ -23,9 +23,9 @@ export default function CategoryDetail({ category, initialMeals }: CategoryDetai
     <Layout>
       <AnimatedSection direction="up">
         <PageHeader 
-          title="Delicious"
-          highlight={category}
-          subtitle={`Explore our hand-picked collection of ${category.toLowerCase()} recipes. Each dish is selected for its authentic flavor and unique preparation style.`}
+          title="Cooking with"
+          highlight={ingredient}
+          subtitle={`Unlock the potential of ${ingredient.toLowerCase()}. Discover creative and delicious ways to make this ingredient the star of your next meal.`}
         />
       </AnimatedSection>
 
@@ -37,19 +37,19 @@ export default function CategoryDetail({ category, initialMeals }: CategoryDetai
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const category = params?.category as string;
+  const ingredient = params?.ingredient as string;
   try {
-    const meals = await mealService.getMealsByCategory(category);
+    const meals = await mealService.getMealsByIngredient(ingredient);
     return {
       props: {
-        category,
+        ingredient,
         initialMeals: meals,
       },
     };
   } catch (error) {
     return {
       props: {
-        category,
+        ingredient,
         initialMeals: [],
       },
     };

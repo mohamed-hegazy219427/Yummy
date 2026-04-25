@@ -1,16 +1,21 @@
 import { GetServerSideProps } from "next";
 import Layout from "../../components/layout/Layout";
+import PageHeader from "../../components/shared/PageHeader";
 import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
 import { useQuery } from "@tanstack/react-query";
 import { Meal } from "../../types/meal";
+import Head from "next/head";
 
 interface IngredientDetailProps {
   ingredient: string;
   initialMeals: Meal[];
 }
 
-export default function IngredientDetail({ ingredient, initialMeals }: IngredientDetailProps) {
+export default function IngredientDetail({
+  ingredient,
+  initialMeals,
+}: IngredientDetailProps) {
   const { data: meals, isLoading } = useQuery({
     queryKey: ["ingredient", ingredient],
     queryFn: () => mealService.getMealsByIngredient(ingredient),
@@ -18,20 +23,21 @@ export default function IngredientDetail({ ingredient, initialMeals }: Ingredien
   });
 
   return (
-    <Layout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-base-content">
-            {ingredient} <span className="text-primary">Recipes</span>
-          </h1>
-          <p className="text-base-content/60 text-lg">
-            Delicious recipes featuring {ingredient}.
-          </p>
-        </header>
-
-        <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
-      </div>
-    </Layout>
+    <>
+      <Head>
+        <title>{ingredient} Recipes — Yummy</title>
+      </Head>
+      <Layout>
+        <div className="max-w-7xl mx-auto">
+          <PageHeader
+            title={ingredient}
+            highlight="Recipes"
+            subtitle={`Delicious recipes featuring ${ingredient}.`}
+          />
+          <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
+        </div>
+      </Layout>
+    </>
   );
 }
 
@@ -40,17 +46,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   try {
     const meals = await mealService.getMealsByIngredient(ingredient);
     return {
-      props: {
-        ingredient,
-        initialMeals: meals,
-      },
+      props: { ingredient, initialMeals: meals },
     };
   } catch (error) {
     return {
-      props: {
-        ingredient,
-        initialMeals: [],
-      },
+      props: { ingredient, initialMeals: [] },
     };
   }
 };

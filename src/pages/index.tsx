@@ -4,6 +4,8 @@ import MealGrid from "../components/meals/MealGrid";
 import { mealService } from "../api/mealApi";
 import { useQuery } from "@tanstack/react-query";
 import { Meal } from "../types/meal";
+import PageHeader from "../components/ui/PageHeader";
+import AnimatedSection from "../components/ui/AnimatedSection";
 
 interface HomeProps {
   initialMeals: Meal[];
@@ -18,18 +20,23 @@ export default function Home({ initialMeals }: HomeProps) {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 text-base-content">
-            Delicious <span className="text-primary">Recipes</span>
-          </h1>
-          <p className="text-base-content/60 text-lg max-w-2xl">
-            Explore a world of flavors with our curated collection of meals from around the globe.
-          </p>
-        </header>
+      <AnimatedSection direction="up" delay={0.2}>
+        <PageHeader 
+          title="Master Your"
+          highlight="Kitchen"
+          subtitle="Explore thousands of mouth-watering recipes from every corner of the globe. From simple snacks to gourmet feasts, your culinary journey starts here."
+        />
+      </AnimatedSection>
 
+      <section className="mt-20">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-3xl font-black font-serif">Featured <span className="text-primary">Recipes</span></h2>
+          <div className="h-px bg-base-300 flex-1 mx-8 hidden md:block"></div>
+          <span className="badge badge-ghost font-bold py-4">Worldwide Cuisine</span>
+        </div>
+        
         <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
-      </div>
+      </section>
     </Layout>
   );
 }

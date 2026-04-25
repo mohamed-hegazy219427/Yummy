@@ -1,136 +1,131 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Menu, X, Globe, Share2, Facebook, Twitter, Settings } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Button } from "react-aria-components";
-
-gsap.registerPlugin(useGSAP);
+import { 
+  Home, 
+  Search, 
+  LayoutGrid, 
+  MapPin, 
+  ChefHat, 
+  Mail, 
+  Globe,
+  X,
+  Menu
+} from "lucide-react";
+import { FacebookIcon as Facebook, TwitterIcon as Twitter } from "../ui/Icons";
+import ThemePicker from "../ui/ThemePicker";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<HTMLUListElement>(null);
   const router = useRouter();
-  const { theme, setTheme, themes } = useTheme();
-
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  const navRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<HTMLUListElement>(null);
 
   useGSAP(() => {
-    const sidebar = sidebarRef.current;
-    if (!sidebar || !linksRef.current) return;
+    if (!navRef.current || !linksRef.current) return;
     const links = linksRef.current.querySelectorAll("li");
 
     if (isOpen) {
-      gsap.to(sidebar, { left: 0, duration: 0.5, ease: "power2.inOut" });
-      gsap.to(links, {
-        y: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 0.4,
-        ease: "power2.out",
-        delay: 0.2,
-      });
+      gsap.to(navRef.current, { x: 0, duration: 0.6, ease: "power4.out" });
+      gsap.fromTo(links, 
+        { x: -20, opacity: 0 }, 
+        { x: 0, opacity: 1, stagger: 0.1, duration: 0.4, ease: "back.out(1.7)", delay: 0.2 }
+      );
     } else {
-      gsap.to(sidebar, { left: -250, duration: 0.5, ease: "power2.inOut" });
-      gsap.to(links, {
-        y: 50,
-        opacity: 0,
-        stagger: 0.05,
-        duration: 0.3,
-        ease: "power2.in",
-      });
+      gsap.to(navRef.current, { x: "-100%", duration: 0.5, ease: "power4.in" });
     }
-  }, [isOpen]);
+  }, { dependencies: [isOpen], scope: navRef });
 
-  const navLinks = [
-    { name: "Search", href: "/search" },
-    { name: "Categories", href: "/categories" },
-    { name: "Area", href: "/area" },
-    { name: "Ingredients", href: "/ingredients" },
-    { name: "Contact Us", href: "/contact" },
+  const menuItems = [
+    { name: "Home", href: "/", icon: Home },
+    { name: "Search", href: "/search", icon: Search },
+    { name: "Categories", href: "/categories", icon: LayoutGrid },
+    { name: "Area", href: "/area", icon: MapPin },
+    { name: "Ingredients", href: "/ingredients", icon: ChefHat },
+    { name: "Contact", href: "/contact", icon: Mail },
   ];
 
   return (
-    <div
-      ref={sidebarRef}
-      className="fixed top-0 left-[-250px] h-full flex z-50 transition-all duration-500 ease-in-out"
-      style={{ width: "320px" }}
-    >
-      <div className="flex flex-col justify-between h-full w-[250px] bg-zinc-950 text-white p-6 shadow-2xl border-r border-white/10">
-        <div className="mt-8">
-          <ul ref={linksRef} className="space-y-6">
-            {navLinks.map((link) => (
-              <li key={link.name} className="overflow-hidden">
-                <Link
-                  href={link.href}
-                  className={`block text-lg font-medium hover:text-primary transition-colors ${
-                    router.pathname === link.href ? "text-primary" : ""
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Trigger Button - Mobile Only */}
+      <button 
+        onClick={() => setIsOpen(true)}
+        className="fixed top-4 left-4 z-40 btn btn-circle btn-primary md:hidden shadow-lg"
+      >
+        <Menu size={24} />
+      </button>
+
+      {/* Sidebar Container */}
+      <aside 
+        ref={navRef}
+        className="fixed top-0 left-0 h-full w-72 bg-base-200 border-r border-base-300 z-50 transform -translate-x-full md:translate-x-0 transition-none flex flex-col"
+      >
+        {/* Header */}
+        <div className="p-8 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-content font-bold text-2xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary/20">
+              Y
+            </div>
+            <span className="text-2xl font-serif font-black tracking-tight">Yummy</span>
+          </Link>
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="btn btn-ghost btn-circle btn-sm md:hidden"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <div className="space-y-4">
-          <div className="dropdown dropdown-top dropdown-right">
-            <label tabIndex={0} className="btn btn-ghost btn-sm flex items-center gap-2">
-              <Settings size={16} />
-              Themes
-            </label>
-            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-zinc-900 rounded-box w-52 h-64 overflow-y-auto">
-              {themes.map((t) => (
-                <li key={t}>
-                  <button 
-                    onClick={() => setTheme(t)}
-                    className={`${theme === t ? 'active' : ''} text-white`}
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-4">
+          <ul ref={linksRef} className="menu menu-lg gap-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = router.pathname === item.href;
+              return (
+                <li key={item.name}>
+                  <Link 
+                    href={item.href}
+                    className={`flex items-center gap-4 transition-all duration-300 ${
+                      isActive ? "active bg-primary/10 text-primary font-bold" : "hover:bg-base-300"
+                    }`}
+                    onClick={() => setIsOpen(false)}
                   >
-                    {t.charAt(0).toUpperCase() + t.slice(1)}
-                  </button>
+                    <Icon size={22} className={isActive ? "text-primary" : "opacity-60"} />
+                    {item.name}
+                  </Link>
                 </li>
-              ))}
-            </ul>
-          </div>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Footer */}
+        <div className="p-8 space-y-6 border-t border-base-300">
+          <ThemePicker />
           
-          <div className="flex gap-4">
-            <Facebook size={20} className="cursor-pointer hover:text-primary" />
-            <Twitter size={20} className="cursor-pointer hover:text-primary" />
-            <Globe size={20} className="cursor-pointer hover:text-primary" />
+          <div className="flex items-center gap-4 text-base-content/60">
+            <a href="#" className="hover:text-primary transition-colors"><Facebook size={20} /></a>
+            <a href="#" className="hover:text-primary transition-colors"><Twitter size={20} /></a>
+            <a href="#" className="hover:text-primary transition-colors"><Globe size={20} /></a>
           </div>
-          <p className="text-xs text-gray-500">
-            Copyright © 2024 <br /> All Rights Reserved.
+
+          <p className="text-xs opacity-40 font-medium">
+            &copy; 2026 Yummy Recipes.<br />
+            Built with passion for food.
           </p>
         </div>
-      </div>
-
-      <div className="flex flex-col justify-between items-center h-full w-[70px] bg-base-100 border-r border-base-300 py-6 text-base-content">
-        <Link href="/">
-          <img src="/imgs/logo.png" alt="Yummy Logo" className="w-12 h-12" />
-        </Link>
-        
-        <Button 
-          onPress={toggleSidebar} 
-          className="p-2 hover:bg-base-200 rounded-full transition-colors outline-none focus-visible:ring-2 ring-primary"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </Button>
-
-        <div className="flex flex-col gap-4">
-            <button 
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 hover:bg-base-200 rounded-full transition-colors"
-            >
-                <Globe size={20} />
-            </button>
-          <Share2 size={20} className="cursor-pointer hover:text-primary" />
-        </div>
-      </div>
-    </div>
+      </aside>
+    </>
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Layout from "../components/layout/Layout";
-import { Button, Form, Input, Label, TextField, FieldError } from "react-aria-components";
+import { Send, User, Mail, Phone, Hash, Lock, CheckCircle2, MessageSquare } from "lucide-react";
+import PageHeader from "../components/ui/PageHeader";
+import AnimatedSection from "../components/ui/AnimatedSection";
 
 export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -12,67 +14,95 @@ export default function Contact() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto">
-        <header className="mb-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-base-content">
-            Get in <span className="text-primary">Touch</span>
-          </h1>
-          <p className="text-base-content/60 text-lg">
-            Have questions or feedback? We'd love to hear from you.
-          </p>
-        </header>
+      <AnimatedSection direction="up">
+        <PageHeader 
+          title="Connect with"
+          highlight="Us"
+          subtitle="Have a question about a recipe? Want to share your culinary creations? We're here to help and listen to our community."
+        />
+      </AnimatedSection>
 
+      <div className="max-w-5xl mx-auto mt-20">
         {isSubmitted ? (
-          <div className="card bg-success text-success-content p-12 text-center shadow-2xl animate-bounce-short">
-            <h2 className="text-3xl font-black mb-4">Message Sent!</h2>
-            <p className="text-lg">Thank you for reaching out. We'll get back to you soon.</p>
-            <button onClick={() => setIsSubmitted(false)} className="btn btn-ghost mt-8 underline">Send another message</button>
-          </div>
+          <AnimatedSection direction="up" className="bg-success/10 border-2 border-success/20 p-16 rounded-[3rem] text-center space-y-8">
+            <div className="w-24 h-24 bg-success rounded-full flex items-center justify-center text-success-content mx-auto shadow-xl shadow-success/20">
+              <CheckCircle2 size={48} />
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-5xl font-black font-serif">Message Received!</h2>
+              <p className="text-xl opacity-60">Thank you for reaching out. Our chefs will get back to you shortly.</p>
+            </div>
+            <button onClick={() => setIsSubmitted(false)} className="btn btn-outline btn-lg rounded-2xl">Send Another Message</button>
+          </AnimatedSection>
         ) : (
-          <div className="card bg-base-200 p-8 md:p-12 shadow-xl border border-base-300">
-            <Form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={handleSubmit}>
-              <TextField isRequired className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Your Name</Label>
-                <Input className="input input-bordered w-full bg-base-100" placeholder="John Doe" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
+             <AnimatedSection direction="right" className="lg:col-span-2 space-y-10">
+                <div className="space-y-4">
+                   <h3 className="text-3xl font-black font-serif">Contact Information</h3>
+                   <p className="opacity-60 text-lg">Reach out to us through the form or our direct channels.</p>
+                </div>
 
-              <TextField isRequired type="email" className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Email Address</Label>
-                <Input className="input input-bordered w-full bg-base-100" placeholder="john@example.com" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
+                <div className="space-y-6">
+                   {[
+                     { icon: Mail, label: "Email", value: "chef@yummy.com" },
+                     { icon: Phone, label: "Phone", value: "+1 (555) 123-4567" },
+                     { icon: Globe, label: "Website", value: "www.yummy-recipes.com" }
+                   ].map((item, i) => (
+                     <div key={i} className="flex items-center gap-6 p-6 rounded-2xl bg-base-200 border border-base-300">
+                        <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-primary-content">
+                           <item.icon size={24} />
+                        </div>
+                        <div>
+                           <div className="text-xs font-bold opacity-40 uppercase tracking-widest">{item.label}</div>
+                           <div className="text-lg font-bold">{item.value}</div>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </AnimatedSection>
 
-              <TextField isRequired type="tel" className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Phone Number</Label>
-                <Input className="input input-bordered w-full bg-base-100" placeholder="+1 (555) 000-0000" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
+             <AnimatedSection direction="left" className="lg:col-span-3">
+               <div className="bg-base-200 p-10 md:p-16 rounded-[3rem] border border-base-300 shadow-2xl">
+                <form className="space-y-8" onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><User size={14}/> Name</span></label>
+                      <input type="text" required placeholder="John Doe" className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                    <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><Mail size={14}/> Email</span></label>
+                      <input type="email" required placeholder="john@example.com" className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                    <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><Phone size={14}/> Phone</span></label>
+                      <input type="tel" placeholder="+1 (555) 000-0000" className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                    <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><Hash size={14}/> Age</span></label>
+                      <input type="number" placeholder="25" className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                    <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><Lock size={14}/> Password</span></label>
+                      <input type="password" required className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                     <div className="form-control">
+                      <label className="label"><span className="label-text font-bold flex items-center gap-2"><Lock size={14}/> Confirm</span></label>
+                      <input type="password" required className="input input-bordered rounded-xl bg-base-100" />
+                    </div>
+                  </div>
 
-              <TextField isRequired type="number" className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Age</Label>
-                <Input className="input input-bordered w-full bg-base-100" placeholder="25" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
+                  <div className="form-control">
+                    <label className="label"><span className="label-text font-bold flex items-center gap-2"><MessageSquare size={14}/> Your Message</span></label>
+                    <textarea placeholder="Tell us what's on your mind..." className="textarea textarea-bordered rounded-xl bg-base-100 min-h-[150px]"></textarea>
+                  </div>
 
-              <TextField isRequired type="password" className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Password</Label>
-                <Input className="input input-bordered w-full bg-base-100" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
-
-              <TextField isRequired type="password" className="flex flex-col gap-2">
-                <Label className="font-bold opacity-70">Confirm Password</Label>
-                <Input className="input input-bordered w-full bg-base-100" />
-                <FieldError className="text-error text-xs" />
-              </TextField>
-
-              <div className="md:col-span-2 mt-4">
-                <Button type="submit" className="btn btn-primary btn-block text-white font-bold text-lg">
-                  Submit Message
-                </Button>
-              </div>
-            </Form>
+                  <button type="submit" className="btn btn-primary btn-lg btn-block rounded-2xl text-white font-black shadow-xl shadow-primary/20 gap-3 group">
+                    <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> 
+                    Send Message
+                  </button>
+                </form>
+               </div>
+             </AnimatedSection>
           </div>
         )}
       </div>

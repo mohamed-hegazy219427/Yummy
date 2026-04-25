@@ -1,9 +1,10 @@
 import { GetStaticProps } from "next";
 import Layout from "../components/layout/Layout";
-import Link from "next/link";
-import { MapPin } from "lucide-react";
 import { mealService } from "../api/mealApi";
 import { Area } from "../types/meal";
+import PageHeader from "../components/ui/PageHeader";
+import AreaCard from "../components/ui/AreaCard";
+import AnimatedSection from "../components/ui/AnimatedSection";
 
 interface AreaProps {
   areas: Area[];
@@ -12,29 +13,24 @@ interface AreaProps {
 export default function Areas({ areas }: AreaProps) {
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-base-content">
-            Cuisine <span className="text-primary">Areas</span>
-          </h1>
-          <p className="text-base-content/60 text-lg max-w-2xl">
-            Explore recipes by their geographical origin.
-          </p>
-        </header>
+      <AnimatedSection direction="up">
+        <PageHeader 
+          title="World"
+          highlight="Cuisine"
+          subtitle="Take your taste buds on a global adventure. Discover traditional dishes and hidden gems from cultures across the planet."
+        />
+      </AnimatedSection>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <section className="mt-12">
+        <AnimatedSection 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8"
+          stagger={0.05}
+        >
           {areas?.map((area) => (
-            <Link 
-              key={area.strArea} 
-              href={`/area/${area.strArea}`}
-              className="group flex flex-col items-center justify-center p-8 rounded-2xl bg-base-200 hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-xl transform hover:-translate-y-2 border border-base-300"
-            >
-              <MapPin size={48} className="mb-4 text-primary group-hover:text-white transition-colors" />
-              <h3 className="text-xl font-bold">{area.strArea}</h3>
-            </Link>
+            <AreaCard key={area.strArea} area={area} />
           ))}
-        </div>
-      </div>
+        </AnimatedSection>
+      </section>
     </Layout>
   );
 }

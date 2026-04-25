@@ -3,8 +3,9 @@ import Layout from "../components/layout/Layout";
 import MealGrid from "../components/meals/MealGrid";
 import { mealService } from "../api/mealApi";
 import { useQuery } from "@tanstack/react-query";
-import { Search as SearchIcon } from "lucide-react";
-import { Input, Label, TextField } from "react-aria-components";
+import { Search as SearchIcon, Filter } from "lucide-react";
+import PageHeader from "../components/ui/PageHeader";
+import AnimatedSection from "../components/ui/AnimatedSection";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,22 +24,32 @@ export default function Search() {
     enabled: searchTerm.length > 0 || searchLetter.length > 0,
   });
 
+  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8">
-            Search <span className="text-primary">Meals</span>
-          </h1>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <TextField className="flex flex-col gap-2">
-              <Label className="text-sm font-bold opacity-70">Search by Name</Label>
+      <AnimatedSection direction="up">
+        <PageHeader 
+          title="Find Your"
+          highlight="Flavor"
+          subtitle="Search through our database by name or explore recipes by their starting letter. Your perfect meal is just a few keystrokes away."
+        />
+      </AnimatedSection>
+      
+      <section className="space-y-16">
+        {/* Search Controls */}
+        <AnimatedSection direction="up" delay={0.2} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div className="lg:col-span-7">
+             <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text font-bold opacity-60 flex items-center gap-2"><SearchIcon size={14} /> Search by Name</span>
+              </div>
               <div className="relative">
-                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 opacity-50" size={18} />
-                <Input 
-                  className="input input-bordered w-full pl-10 bg-base-200 focus:outline-primary"
-                  placeholder="Enter meal name..."
+                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={20} />
+                <input 
+                  type="text" 
+                  placeholder="e.g. Sushi, Burger, Pasta..." 
+                  className="input input-bordered input-lg w-full pl-12 rounded-2xl bg-base-200 focus:input-primary transition-all"
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -46,37 +57,48 @@ export default function Search() {
                   }}
                 />
               </div>
-            </TextField>
+            </label>
+          </div>
 
-            <TextField className="flex flex-col gap-2">
-              <Label className="text-sm font-bold opacity-70">Search by First Letter</Label>
-              <Input 
-                className="input input-bordered w-full bg-base-200 focus:outline-primary"
-                placeholder="Enter a letter..."
-                maxLength={1}
-                value={searchLetter}
-                onChange={(e) => {
-                  setSearchLetter(e.target.value);
-                  setSearchTerm("");
-                }}
-              />
-            </TextField>
+          <div className="lg:col-span-5">
+            <div className="label">
+              <span className="label-text font-bold opacity-60 flex items-center gap-2"><Filter size={14} /> Quick Filter</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {alphabet.map((letter) => (
+                <button
+                  key={letter}
+                  onClick={() => {
+                    setSearchLetter(letter);
+                    setSearchTerm("");
+                  }}
+                  className={`btn btn-sm btn-square rounded-lg uppercase ${searchLetter === letter ? "btn-primary" : "btn-ghost bg-base-200"}`}
+                >
+                  {letter}
+                </button>
+              ))}
+            </div>
           </div>
-        </header>
+        </AnimatedSection>
 
-        <MealGrid meals={meals || []} isLoading={isFetching} />
-        
-        {!isFetching && (searchTerm || searchLetter) && (!meals || meals.length === 0) && (
-          <div className="text-center py-20">
-            <p className="text-2xl font-bold opacity-50">No meals found. Try another search!</p>
-          </div>
-        )}
-        {!searchTerm && !searchLetter && !isFetching && (
-          <div className="text-center py-20">
-            <p className="text-2xl font-bold opacity-50">Start typing to find delicious recipes...</p>
-          </div>
-        )}
-      </div>
+        {/* Results */}
+        <div className="pt-10 border-t border-base-300">
+          <MealGrid meals={meals || []} isLoading={isFetching} />
+          
+          {!isFetching && (searchTerm || searchLetter) && (!meals || meals.length === 0) && (
+            <div className="text-center py-32 bg-base-200 rounded-[3rem] border-2 border-dashed border-base-300">
+               <p className="text-3xl font-serif italic opacity-30">We couldn't find any recipes matching your search...</p>
+               <button onClick={() => {setSearchTerm(""); setSearchLetter("")}} className="btn btn-ghost mt-6 underline">Clear Search</button>
+            </div>
+          )}
+          
+          {!searchTerm && !searchLetter && !isFetching && (
+            <div className="text-center py-32 bg-base-200 rounded-[3rem] border-2 border-dashed border-base-300">
+               <p className="text-3xl font-serif italic opacity-30">Start typing or pick a letter to find inspiration...</p>
+            </div>
+          )}
+        </div>
+      </section>
     </Layout>
   );
 }

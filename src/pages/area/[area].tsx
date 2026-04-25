@@ -4,6 +4,8 @@ import MealGrid from "../../components/meals/MealGrid";
 import { mealService } from "../../api/mealApi";
 import { useQuery } from "@tanstack/react-query";
 import { Meal } from "../../types/meal";
+import PageHeader from "../../components/ui/PageHeader";
+import AnimatedSection from "../../components/ui/AnimatedSection";
 
 interface AreaDetailProps {
   area: string;
@@ -19,18 +21,17 @@ export default function AreaDetail({ area, initialMeals }: AreaDetailProps) {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-base-content">
-            {area} <span className="text-primary">Cuisine</span>
-          </h1>
-          <p className="text-base-content/60 text-lg">
-            Delicious recipes from {area}.
-          </p>
-        </header>
+      <AnimatedSection direction="up">
+        <PageHeader 
+          title="Taste of"
+          highlight={area}
+          subtitle={`Dive into the rich culinary heritage of ${area}. Experience the traditional ingredients and techniques that make this cuisine world-renowned.`}
+        />
+      </AnimatedSection>
 
+      <section className="mt-12 pt-10 border-t border-base-300">
         <MealGrid meals={meals || []} isLoading={isLoading && !meals} />
-      </div>
+      </section>
     </Layout>
   );
 }
