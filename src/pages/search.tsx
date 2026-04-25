@@ -14,14 +14,10 @@ export default function Search() {
 
   const { data: meals, isFetching } = useQuery({
     queryKey: ["search", searchTerm, searchLetter],
-    queryFn: async () => {
-      if (searchLetter) {
-        const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${searchLetter}`);
-        const data = await res.json();
-        return data.meals || [];
-      }
-      return mealService.getMealsByName(searchTerm);
-    },
+    queryFn: () =>
+      searchLetter
+        ? mealService.getMealsByFirstLetter(searchLetter)
+        : mealService.getMealsByName(searchTerm),
     enabled: searchTerm.length > 0 || searchLetter.length > 0,
   });
 

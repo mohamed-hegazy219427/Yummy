@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ApiError } from "@/api/mealApi";
 import { useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -20,6 +21,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
           queries: {
             staleTime: 60 * 1000,
             refetchOnWindowFocus: false,
+            // Never retry 4xx — those are permanent client errors
+            retry: (count, err) => {
+              if (err instanceof ApiError && err.status !== undefined && err.status < 500) return false;
+              return count < 2;
+            },
           },
         },
       })
